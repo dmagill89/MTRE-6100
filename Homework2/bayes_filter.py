@@ -2,17 +2,60 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def control_update(beliefs, current_step):
-    for index in range(len(beliefs)):
-        current_belief = beliefs[index]
-        probability = transition_probability()
+# Function for calculating the control updates
+def control_update(beliefs):
+    belief_bar = [0, 0, 0, 0]
 
-def measurement_update():
-    print("calculate measurements")
+    for current_position in range(4):
+        position_belief = []
+
+        for previous_position in range(4):
+            current_probability = transition_probability(current_position, previous_position) * beliefs[previous_position]
+            position_belief.append(current_probability)
+
+        belief_bar[current_position] = round(sum(position_belief), 4)
+    
+    return belief_bar
+
+# Measurement step
+def measurement_update(beliefs, step):
+    measurement_beliefs = []
+    position_values = ['W', 'D', 'W', 'D']
+
+    print("Enter measurement, D for door or W for wall")
+    measurement = input()
+
+    for position in range(4):
+        truth = position_values[position]
+        percentage = lookup(measurement, truth)
+        measurement_beliefs.append(percentage * beliefs[position])
+    
+    nomrmalization_factor = 1 / sum(measurement_beliefs)
+    normalized = [round(value * nomrmalization_factor, 4) for value in measurement_beliefs]
+    
+    return normalized
+
+def lookup(measurement, position_truth):
+    
+    if measurement.casefold() == position_truth.casefold():
+        if measurement == 'D'.casefold():
+            return .7
+        elif measurement == 'W'.casefold():
+            return .75
+        else:
+            return 0
+    else:
+        if measurement == 'D'.casefold():
+            return 0.25
+        elif measurement == 'W'.casefold():
+            return .3
+        else:
+            return 0
+
 
 # returns the normlization factor
-def normalize(partial_belifs):
-    return 1 / sum(partial_belifs)
+def normalize(measurement_beliefs):
+    return 1 / sum(measurement_beliefs)
 
 # return the probability for trasition between the current and previous position
 def transition_probability(current_position, previous_position):
@@ -32,20 +75,40 @@ def transition_probability(current_position, previous_position):
 
 def main():
     beliefs = [0.25, 0.25, 0.25, 0.25]
-    positions = [0, 1, 2, 3]
-    position_lookup = ['wall', 'door', 'wall', 'door']
+    transition_beliefs = []
 
-    for index in range(4):
-        
-        for current_position in positions:
-            belief_bar = []
+    for transition_step in range(4):
 
-            for previous_position in positions:
-            
-                current_probability = transition_probability(current_position, previous_position) * beliefs[previous_position]
-                belief_bar.append(current_probability)
-                
-            print(belief_bar)
+        control_update_beliefs = control_update(beliefs)
+
+        belief_bar = measurement_update(control_update_beliefs, transition_step)
+
+        transition_beliefs.append(belief_bar)
+
+        beliefs = belief_bar
+    
+    for index in range(len(transition_beliefs)):
+        print(f'Belief bar values at T{index}: {transition_beliefs[index]}')
+    
+    x_axis_labels = ['P0', 'P1', 'P2', 'P3']
+
+    plt.subplot(2, 2, 1)
+    plt.bar(x_axis_labels, transition_beliefs[0])
+    plt.title("T0")
+
+    plt.subplot(2, 2, 2)
+    plt.bar(x_axis_labels, transition_beliefs[1])
+    plt.title("T1")
+
+    plt.subplot(2, 2, 3)
+    plt.bar(x_axis_labels, transition_beliefs[2])
+    plt.title("T2")
+
+    plt.subplot(2, 2, 4)
+    plt.bar(x_axis_labels, transition_beliefs[3])
+    plt.title("T3")
+
+    plt.show()
 
 if __name__ == '__main__':
     main()
