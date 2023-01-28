@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import matplotlib.pyplot as plt
-import numpy as np
 
 # Function for calculating the control updates
 def control_update(beliefs):
@@ -30,24 +29,30 @@ def measurement_update(beliefs, step):
         percentage = lookup(measurement, truth)
         measurement_beliefs.append(percentage * beliefs[position])
     
+    # calculate the normalization factor and get the normlized values for 
+    # belief bar
     nomrmalization_factor = 1 / sum(measurement_beliefs)
     normalized = [round(value * nomrmalization_factor, 4) for value in measurement_beliefs]
     
     return normalized
 
+# look up function to return the percentage chance of the robots position 
+# based on the measurement reading and what the position's truth
 def lookup(measurement, position_truth):
+    measurement_no_case = measurement.casefold()
+    truth_no_case = position_truth.casefold()
     
-    if measurement.casefold() == position_truth.casefold():
-        if measurement == 'D'.casefold():
+    if measurement_no_case == truth_no_case:
+        if measurement_no_case == 'D'.casefold():
             return .7
-        elif measurement == 'W'.casefold():
+        elif measurement_no_case == 'W'.casefold():
             return .75
         else:
             return 0
     else:
-        if measurement == 'D'.casefold():
+        if measurement_no_case == 'D'.casefold():
             return 0.25
-        elif measurement == 'W'.casefold():
+        elif measurement_no_case == 'W'.casefold():
             return .3
         else:
             return 0
