@@ -11,36 +11,35 @@ using namespace std;
 #define IN_PRODUCTION
 
 void *wait (void *t ) {
-   int i;
+    int i;
 
-   long tid;
+    long tid;
 
-   tid = (long)t;
+    tid = (long)t;
 
-   cout << "Sleeping in thread " << endl;
+    cout << "Sleeping in thread " << endl;
 
-   sleep(1);
+    sleep(1);
 
-   cout << "Thread with id : " << tid << "  ...exiting " << endl;
+    cout << "Thread with id : " << tid << "  ...exiting " << endl;
 
-   pthread_exit(NULL);
+    pthread_exit(NULL);
 }
 
-int main () 
-{
-#ifdef IN_PRODUCTION
-   std::chrono::time_point<std::chrono::high_resolution_clock> start = std::chrono::high_resolution_clock::now();
-#endif
-   int ret;
-   int i;
-   pthread_t threads[NUM_THREADS];
-   pthread_attr_t attr;
+int main () {
 
-   void *status;
+    std::chrono::time_point<std::chrono::high_resolution_clock> start = std::chrono::high_resolution_clock::now();
 
-   // Initialize and set thread joinable
-   pthread_attr_init(&attr);
-   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);  //PTHREAD_CREATE_DETACHED
+    int ret;
+    int i;
+    pthread_t threads[NUM_THREADS];
+    pthread_attr_t attr;
+
+    void *status;
+
+    // Initialize and set thread joinable
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);  //PTHREAD_CREATE_DETACHED
 
    //pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_DETACHED);
    for( i = 0; i < NUM_THREADS; i++ ) {
@@ -71,14 +70,10 @@ int main ()
       cout << "exiting with status :" << status << endl;
    }
 
-#ifdef IN_PRODUCTION
-   auto final = std::chrono::high_resolution_clock::now();
-   std::cout << "Performance Metric: Time Taken: " 
-              << std::chrono::duration_cast<std::chrono::nanoseconds>(final-start).count() 
-              << "ns\n";
-#endif
+    auto final = std::chrono::high_resolution_clock::now();
+    std::cout << "Performance Metric: Time Taken: " << std::chrono::duration_cast<std::chrono::nanoseconds>(final-start).count() << "ns\n";
 
-   cout << "Main: program exiting." << endl;
-   pthread_exit(NULL);
 
+    cout << "Main: program exiting." << endl;
+    pthread_exit(NULL);
 }
