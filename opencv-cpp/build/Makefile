@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named part6.o
+
+# Build rule for target.
+part6.o: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 part6.o
+.PHONY : part6.o
+
+# fast build rule for target.
+part6.o/fast:
+	$(MAKE) -f CMakeFiles/part6.o.dir/build.make CMakeFiles/part6.o.dir/build
+.PHONY : part6.o/fast
+
+#=============================================================================
 # Target rules for targets named part5.o
 
 # Build rule for target.
@@ -310,6 +323,33 @@ Lecture8-Part5.cpp.s:
 	$(MAKE) -f CMakeFiles/part5.o.dir/build.make CMakeFiles/part5.o.dir/Lecture8-Part5.cpp.s
 .PHONY : Lecture8-Part5.cpp.s
 
+Lecture8-Part6.o: Lecture8-Part6.cpp.o
+
+.PHONY : Lecture8-Part6.o
+
+# target to build an object file
+Lecture8-Part6.cpp.o:
+	$(MAKE) -f CMakeFiles/part6.o.dir/build.make CMakeFiles/part6.o.dir/Lecture8-Part6.cpp.o
+.PHONY : Lecture8-Part6.cpp.o
+
+Lecture8-Part6.i: Lecture8-Part6.cpp.i
+
+.PHONY : Lecture8-Part6.i
+
+# target to preprocess a source file
+Lecture8-Part6.cpp.i:
+	$(MAKE) -f CMakeFiles/part6.o.dir/build.make CMakeFiles/part6.o.dir/Lecture8-Part6.cpp.i
+.PHONY : Lecture8-Part6.cpp.i
+
+Lecture8-Part6.s: Lecture8-Part6.cpp.s
+
+.PHONY : Lecture8-Part6.s
+
+# target to generate assembly for a file
+Lecture8-Part6.cpp.s:
+	$(MAKE) -f CMakeFiles/part6.o.dir/build.make CMakeFiles/part6.o.dir/Lecture8-Part6.cpp.s
+.PHONY : Lecture8-Part6.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -317,6 +357,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... part6.o"
 	@echo "... part5.o"
 	@echo "... part3.o"
 	@echo "... rebuild_cache"
@@ -338,6 +379,9 @@ help:
 	@echo "... Lecture8-Part5.o"
 	@echo "... Lecture8-Part5.i"
 	@echo "... Lecture8-Part5.s"
+	@echo "... Lecture8-Part6.o"
+	@echo "... Lecture8-Part6.i"
+	@echo "... Lecture8-Part6.s"
 .PHONY : help
 
 
