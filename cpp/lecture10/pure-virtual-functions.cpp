@@ -1,6 +1,3 @@
-// Demonstrate class inheritance and polymorphism, and pure virtual functions
-// George F. Riley, Georgia Tech, Fall 2009
-
 #include <iostream>
 #include <math.h>
 
