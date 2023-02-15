@@ -1,0 +1,3 @@
+/home/david/Projects/MTRE-6100/Homework5/build/CMakeFiles/rebuild_cache.dir
+/home/david/Projects/MTRE-6100/Homework5/build/CMakeFiles/edit_cache.dir
+/home/david/Projects/MTRE-6100/Homework5/build/CMakeFiles/homework5.o.dir
