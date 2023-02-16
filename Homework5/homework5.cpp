@@ -6,6 +6,7 @@
 #include "opencv2/features2d.hpp"
 #include "opencv2/xfeatures2d.hpp"
 #include "includes/video_base.h"
+#include "includes/object_detection.h"
 
 using namespace cv;
 using namespace cv::xfeatures2d;
@@ -21,7 +22,7 @@ int main(int argc, char **argv) {
     cin >> file_name;
     cout << file_name << endl;
 
-    VideoBase video_base(file_name);
+    ObjectDetection video_base(file_name);
 
     video_base.play();
 
