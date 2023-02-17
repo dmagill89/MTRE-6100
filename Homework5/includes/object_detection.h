@@ -27,13 +27,17 @@ class ObjectDetection : VideoBase {
 
         void save_video(); // saves the video
 
-        void take_snapshot(); // save a snapshot of the video
+        void take_snapshot(Mat frame); // save a snapshot of the video
     
     private:
 
         Mat current_frame;
 
         Mat image_template;
+
+        VideoWriter writer; // video writer for saving
+
+        bool save;
 
         void match(Mat frame); // match based on selected object
 };

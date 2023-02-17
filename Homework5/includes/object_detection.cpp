@@ -53,6 +53,7 @@ ObjectDetection::ObjectDetection() {
 
 ObjectDetection::ObjectDetection(string file_name) : VideoBase(file_name) {
     cout << "ObjectDetection custom constructor called." << endl;
+    save = true;
 }
 
 void ObjectDetection::object_selection() {
@@ -80,6 +81,10 @@ void ObjectDetection::play() {
     // loop over the frames of the video
     while (video.isOpened()) {
         Mat current_frame;
+        int frame_width = video.get(cv::CAP_PROP_FRAME_WIDTH);
+        int frame_height = video.get(cv::CAP_PROP_FRAME_HEIGHT);
+
+        writer = VideoWriter("../save/out.mp4", cv::VideoWriter::fourcc('M','J','P','G'), 10, Size(frame_width,frame_height));
 
         // wait for a new frame from file and store it into frame
         video.read(current_frame);
@@ -94,9 +99,18 @@ void ObjectDetection::play() {
 
         imshow("Frame", current_frame);
 
+        if (save) {
+            writer.write(current_frame);
+        }
+
         if (waitKey(1) == 't') {
             cout << "Take snapshot" << endl;
-            take_snapshot();
+            take_snapshot(current_frame);
+        }
+
+        if (waitKey(1) == 's') {
+            cout << "Begin saving." << endl;
+            save_video();
         }
 
         if (waitKey(1) == 'q') {
@@ -159,10 +173,12 @@ void ObjectDetection::match(Mat frame) {
     line(frame, sceneCorners[3], sceneCorners[0], Scalar(0, 0, 255), 4);
 }
 
-void ObjectDetection::take_snapshot() {
-    imwrite("snapshot", current_frame);
+void ObjectDetection::take_snapshot(Mat frame) {
+    if (!frame.empty()) {
+        imwrite("../save/snapshot.jpg", frame);
+    }
 }
 
 void ObjectDetection::save_video() {
-    
+    save = true;
 }
