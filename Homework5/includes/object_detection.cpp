@@ -94,7 +94,12 @@ void ObjectDetection::play() {
 
         imshow("Frame", current_frame);
 
-        if (waitKey(5) >= 0) {
+        if (waitKey(1) == 't') {
+            cout << "Take snapshot" << endl;
+            take_snapshot();
+        }
+
+        if (waitKey(1) == 'q') {
             break;
         }
     }
@@ -152,4 +157,12 @@ void ObjectDetection::match(Mat frame) {
     line(frame, sceneCorners[1], sceneCorners[2], Scalar(0, 0, 255), 4);
     line(frame, sceneCorners[2], sceneCorners[3], Scalar(0, 0, 255), 4);
     line(frame, sceneCorners[3], sceneCorners[0], Scalar(0, 0, 255), 4);
+}
+
+void ObjectDetection::take_snapshot() {
+    imwrite("snapshot", current_frame);
+}
+
+void ObjectDetection::save_video() {
+    
 }
