@@ -24,6 +24,7 @@ int main(int argc, char **argv) {
 
     ObjectDetection video_base(file_name);
 
+    video_base.object_selection();
     video_base.play();
 
     return 0;

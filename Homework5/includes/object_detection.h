@@ -31,6 +31,8 @@ class ObjectDetection : VideoBase {
     
     private:
 
+        Mat current_frame;
+
         Mat image_template;
 
         void match(Mat frame); // match based on selected object

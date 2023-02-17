@@ -13,6 +13,40 @@ using std::endl;
 using namespace cv;
 using namespace cv::xfeatures2d;
 
+Mat img;
+
+void crop(int event, int x, int y, int, void*) {
+    Point cor1, cor2;
+    Rect box;
+
+    if (event == EVENT_LBUTTONDOWN) {
+        cor1.x = x;
+        cor1.y = y;
+        cout << "Corner 1: " << cor1 << endl;
+    }
+
+    if (event == EVENT_LBUTTONUP) {
+        
+        if (abs(x - cor1.x) > 20 && abs(y - cor1.y) > 20) {
+            cor2.x = x;
+            cor2.y = y;
+            cout << "Corner 2: " << cor2 << endl;
+
+            // Get box area for image template.
+            box.width = abs(cor1.x - cor2.x);
+            box.height = abs(cor1.y - cor2.y);
+            box.x = min(cor1.x, cor2.x);
+            box.y = min(cor1.y, cor2.y);
+
+            Mat cropped(img, box); // crop image from rectangle 
+
+            imshow("Cropped Image", cropped); // display cropped image
+
+            img = cropped; // set temp image to cropped
+        }
+    }
+}
+
 ObjectDetection::ObjectDetection() {
     cout << "ObjectDetection default constructor called" << endl;
 }
@@ -21,9 +55,22 @@ ObjectDetection::ObjectDetection(string file_name) : VideoBase(file_name) {
     cout << "ObjectDetection custom constructor called." << endl;
 }
 
+void ObjectDetection::object_selection() {
+
+    if (!video.isOpened()) {
+        cout << "Error opening video stream of file." << endl;
+        exit(-1);
+    }
+
+    video.read(img);
+    imshow("Object Select", img);
+    setMouseCallback("Object Select", crop);
+
+    waitKey(0);
+    image_template = img;
+}
+
 void ObjectDetection::play() {
-    Mat valveTemplate = imread("../required_files/valve.png", IMREAD_GRAYSCALE);          // valve template for feature matching
-    Mat circuitTemplate = imread("../required_files/circuit.png", IMREAD_GRAYSCALE);      // circuit template or freature mathcing
 
     if (!video.isOpened()) {
         cout << "Error opening video stream of file." << endl;
@@ -32,20 +79,20 @@ void ObjectDetection::play() {
 
     // loop over the frames of the video
     while (video.isOpened()) {
-        Mat frame;
+        Mat current_frame;
 
         // wait for a new frame from file and store it into frame
-        video.read(frame);
+        video.read(current_frame);
 
-        if (frame.empty()) {
+        if (current_frame.empty()) {
             cout << "ERROR: Blank frame grabbed" << endl;
             exit(-1);
         }
 
-        // match(frame);
-        // match(frame);
+        match(current_frame);
+        match(current_frame);
 
-        imshow("Frame", frame);
+        imshow("Frame", current_frame);
 
         if (waitKey(5) >= 0) {
             break;
@@ -54,7 +101,7 @@ void ObjectDetection::play() {
 }
 
 void ObjectDetection::match(Mat frame) {
-        Ptr<SIFT> detector = SIFT::create();
+    Ptr<SIFT> detector = SIFT::create();
     std::vector<KeyPoint> keypoints_object, keypoints_scene;
     Mat descriptors_object, descriptors_scene;
     detector->detectAndCompute(image_template, noArray(), keypoints_object, descriptors_object);
